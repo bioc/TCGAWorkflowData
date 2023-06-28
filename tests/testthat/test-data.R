@@ -1,45 +1,39 @@
 context("data")
 
 test_that("Loading data works", {
-  data("biogrid")
-  is_identical_to(ls(),"tmp.biogrid")
-  rm(list=ls())
-
-  data("GBMnocnvhg19")
-  is_identical_to(ls(),"cnvMatrix")
+  data(list = "biogrid")
+  testthat::expect_true(is(tmp.biogrid,"data.frame"))
   rm(list=ls())
 
   data("elmerExample")
-  is_identical_to(sort(ls()),sort(c( "exp.elmer","gbm.samples", "lgg.samples", "met.elmer")))
+  testthat::expect_true(is(gbm.samples,"character"))
+  testthat::expect_true(is(lgg.samples,"character"))
+  testthat::expect_true(is(met,"SummarizedExperiment"))
   rm(list=ls())
 
-
-  data("GBMIllumina_HiSeq")
-  is_identical_to(sort(ls()),sort(c( "gbm.exp")))
+  data("TCGA_LGG_Transcriptome_20_samples")
+  testthat::expect_true(is(exp_lgg,"SummarizedExperiment"))
   rm(list=ls())
 
-  data("LGGIllumina_HiSeq")
-  is_identical_to(sort(ls()),sort(c( "lgg.exp")))
+  data("TCGA_GBM_Transcriptome_20_samples")
+  testthat::expect_true(is(exp_gbm,"SummarizedExperiment"))
   rm(list=ls())
 
   data("met20SamplesGBMLGGchr9")
-  is_identical_to(sort(ls()),sort(c("met")))
+  testthat::expect_true(is(met,"SummarizedExperiment"))
   rm(list=ls())
 
-  data("mafMutect2LGGGBM")
-  is_identical_to(sort(ls()),sort(c("GBMmut","LGGmut","mut")))
-  rm(list=ls())
-
-  data("markersMatrix")
-  is_identical_to(sort(ls()),sort(c( "markersMatrix")))
+  data("maf_lgg_gbm")
+  testthat::expect_true(is(maf,"data.frame"))
   rm(list=ls())
 
   data("histoneMarks")
-  is_identical_to(sort(ls()),sort(c( "histone.marks")))
+  testthat::expect_true(is(histone.marks,"list"))
   rm(list=ls())
 
   data("genes_GR")
-  is_identical_to(sort(ls()),sort(c( "genes","genes_GR")))
+  testthat::expect_true(is(genes_GR,"GenomicRanges"))
+  testthat::expect_true(is(genes,"data.frame"))
   rm(list=ls())
 
 })

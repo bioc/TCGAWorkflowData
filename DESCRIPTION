@@ -1,13 +1,13 @@
 Package: TCGAWorkflowData
 Title: Data for TCGA Workflow 
-Version: 1.25.2
+Version: 1.25.3
 Author: Tiago Chedraoui Silva  <tiagochst@gmail.com>
 Maintainer: Tiago Chedraoui Silva <tiagochst@gmail.com>
 Description:
   This experimental data package contains 11 data sets necessary to follow the 
   "TCGA Workflow: Analyze cancer genomics and epigenomics data using Bioconductor packages".
 Depends:
-    R (>= 3.4.0)
+    R (>= 3.5.0)
 Imports: SummarizedExperiment
 License: GPL-3
 VignetteBuilder: knitr

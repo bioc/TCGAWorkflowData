@@ -81,7 +81,7 @@ NULL
 #' workflow: Aliquot Ensemble Somatic Variant Merging and Masking
 #' @docType data
 #' @keywords internal
-#' @name maf_lgg_gbm
+#' @name maf
 #' @format A matrix with 87957 rows and 141 columns
 #' @examples
 #' data("maf_lgg_gbm")
