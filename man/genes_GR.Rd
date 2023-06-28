@@ -4,7 +4,9 @@
 \name{genes_GR}
 \alias{genes_GR}
 \title{A GRanges object with gene information (hg19)}
-\format{A GRanges object}
+\format{
+A GRanges object
+}
 \description{
 A GRanges object with gene information (hg19)
 }

@@ -4,7 +4,9 @@
 \name{cnvMatrix}
 \alias{cnvMatrix}
 \title{CNV data for 20 TCGA-GBM samples}
-\format{A matrix with 3252 rows and 6 columns}
+\format{
+A matrix with 3252 rows and 6 columns
+}
 \description{
 CNV data for 20 TCGA-GBM samples
 }

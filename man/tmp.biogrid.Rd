@@ -4,7 +4,9 @@
 \name{tmp.biogrid}
 \alias{tmp.biogrid}
 \title{Biogrid information}
-\format{Two matrices with 24776 rows and 580 columns}
+\format{
+Two matrices with 24776 rows and 580 columns
+}
 \description{
 Biogrid information
 }

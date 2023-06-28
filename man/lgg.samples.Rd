@@ -4,7 +4,9 @@
 \name{lgg.samples}
 \alias{lgg.samples}
 \title{Identifiers for the 10 LGG samples in the ELMER objects}
-\format{A vector of 10 barcodes}
+\format{
+A vector of 10 barcodes
+}
 \description{
 Identifiers for the 10 LGG samples in the ELMER objects
 }

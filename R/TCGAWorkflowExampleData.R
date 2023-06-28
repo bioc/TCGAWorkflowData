@@ -67,24 +67,24 @@ NULL
 #' data("elmerExample")
 NULL
 
-#' A gene expression matrix wih 20 LGG samples
+#' A gene expression matrix with 20 LGG samples
 #' @docType data
 #' @keywords internal
-#' @name lgg.exp
-#' @format Gene expression: A SummariedExperiment object
+#' @name exp_lgg
+#' @format Gene expression: A SummarizedExperiment object
 #' with 21022 rows and 20 columns
 #' @examples
-#' data("LGGIllumina_HiSeq")
+#' data("TCGA_LGG_Transcriptome_20_samples")
 NULL
 
-#' A gene expression matrix wih 20 GBM samples
+#' A gene expression matrix with 20 GBM samples
 #' @docType data
 #' @keywords internal
-#' @name gbm.exp
-#' @format Gene expression: A SummariedExperiment object
+#' @name exp_gbm
+#' @format Gene expression: A SummarizedExperiment object
 #'  with 21022 rows and 20 columns
 #' @examples
-#' data("GBMIllumina_HiSeq")
+#' data("TCGA_GBM_Transcriptome_20_samples")
 NULL
 
 #' CNV data for 20 TCGA-GBM samples
@@ -96,31 +96,14 @@ NULL
 #' data("GBMnocnvhg19")
 NULL
 
-#' Merged LGG and GBM GDC maf files for  Somatic Mutation Calling Workflow mutect2
+#' Merged LGG and GBM GDC MAF files from GDC
+#' workflow: Aliquot Ensemble Somatic Variant Merging and Masking
 #' @docType data
 #' @keywords internal
-#' @name mut
-#' @format A matrix with 101942 rows and 114 columns
+#' @name maf_lgg_gbm
+#' @format A matrix with 87957 rows and 141 columns
 #' @examples
-#' data("mafMutect2LGGGBM")
-NULL
-
-#'  LGG  GDC maf files for  Somatic Mutation Calling Workflow mutect2
-#' @docType data
-#' @keywords internal
-#' @name LGGmut
-#' @format A matrix with 29840 rows and 114 columns
-#' @examples
-#' data("mafMutect2LGGGBM")
-NULL
-
-#'  GBM GDC maf files for  Somatic Mutation Calling Workflow mutect2
-#' @docType data
-#' @keywords internal
-#' @name GBMmut
-#' @format A matrix with 72102 rows and 114 columns
-#' @examples
-#' data("mafMutect2LGGGBM")
+#' data("maf_lgg_gbm")
 NULL
 
 #'  histone marks specific for brain tissue from the Roadmap database.
@@ -148,10 +131,10 @@ NULL
 #' From: GDAC firehose, downloaded with RTCGAtoolbox
 #' @docType data
 #' @keywords internal
-#' @name gistic.allbygene
+#' @name gistic_allbygene
 #' @format A matrix with 24776 rows and 580 columns
 #' @examples
-#' data("GBMGistic")
+#' data("gbm_gistic")
 NULL
 
 #' A subset of GBM GISTIC2 results, which is used to identify genes
@@ -159,10 +142,10 @@ NULL
 #' From: GDAC firehose, downloaded with RTCGAtoolbox
 #' @docType data
 #' @keywords internal
-#' @name gistic.thresholedbygene
+#' @name gistic_thresholedbygene
 #' @format A matrix with 24776 rows and 580 columns
 #' @examples
-#' data("GBMGistic")
+#' data("gbm_gistic")
 NULL
 
 #' Biogrid information

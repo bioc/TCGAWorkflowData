@@ -4,7 +4,9 @@
 \name{gbm.samples}
 \alias{gbm.samples}
 \title{Identifiers for the 10 GBM samples in the ELMER objects}
-\format{A vector of 10 barcodes}
+\format{
+A vector of 10 barcodes
+}
 \description{
 Identifiers for the 10 GBM samples in the ELMER objects
 }

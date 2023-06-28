@@ -3,7 +3,6 @@
 \docType{package}
 \name{TCGAWorkflowData}
 \alias{TCGAWorkflowData}
-\alias{TCGAWorkflowData-package}
 \title{Data for TCGA Workflow}
 \description{
 This experimental data package has the data necessary to follow the

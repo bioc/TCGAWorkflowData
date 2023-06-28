@@ -5,7 +5,9 @@
 \alias{exp}
 \title{A gene expression matrix for 10 GBM and 10 LGG samples prepared for
 the creation of an ELMER object.}
-\format{A matrix with 21022 rows and 20 samples}
+\format{
+A matrix with 21022 rows and 20 samples
+}
 \description{
 A gene expression matrix for 10 GBM and 10 LGG samples prepared for
 the creation of an ELMER object.

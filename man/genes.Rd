@@ -4,7 +4,9 @@
 \name{genes}
 \alias{genes}
 \title{A data frame object with gene information (hg19)}
-\format{A dataframe object}
+\format{
+A dataframe object
+}
 \description{
 A data frame object with gene information (hg19)
 }

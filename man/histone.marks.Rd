@@ -4,7 +4,9 @@
 \name{histone.marks}
 \alias{histone.marks}
 \title{histone marks specific for brain tissue from the Roadmap database.}
-\format{A matrix with 72102 rows and 114 columns}
+\format{
+A matrix with 72102 rows and 114 columns
+}
 \description{
 histone marks specific for brain tissue from the Roadmap database.
 }
