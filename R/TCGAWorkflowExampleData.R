@@ -3,17 +3,6 @@
 #' for 10 LGG samples and 10 GBM samples
 #' @docType data
 #' @keywords internal
-#' @name commonCNV
-#' @format A data frame with 7454 rows and 6 columns
-#' @examples
-#' data("CNV.hg19.bypos.111213")
-NULL
-
-#' A SummarizedExperiment containing
-#' TCGA data: DNA methylation platform 450K chromossome 9
-#' for 10 LGG samples and 10 GBM samples
-#' @docType data
-#' @keywords internal
 #' @name met
 #' @import SummarizedExperiment
 #' @format A SumarrizedExperiment with 9861 rows and 20 samples
@@ -87,14 +76,6 @@ NULL
 #' data("TCGA_GBM_Transcriptome_20_samples")
 NULL
 
-#' CNV data for 20 TCGA-GBM samples
-#' @docType data
-#' @keywords internal
-#' @name cnvMatrix
-#' @format A matrix with 3252 rows and 6 columns
-#' @examples
-#' data("GBMnocnvhg19")
-NULL
 
 #' Merged LGG and GBM GDC MAF files from GDC
 #' workflow: Aliquot Ensemble Somatic Variant Merging and Masking
@@ -115,16 +96,6 @@ NULL
 #' data("histoneMarks")
 NULL
 
-#' Probes meta file from broadinstitute website for Copy Number
-#' Variation Analysis (CNV) analysis
-#' From: ftp://ftp.broadinstitute.org/pub/GISTIC2.0/hg19_support/genome.info.6.0_hg19.na31_minus_frequent_nan_probes_sorted_2.1.txt
-#' @docType data
-#' @keywords internal
-#' @name markersMatrix
-#' @format A matrix with 1831228 rows and 3 columns
-#' @examples
-#' data("markersMatrix")
-NULL
 
 #' A subset of GBM GISTIC2 results, which is used to identify genes
 #' targeted by somatic copy-number alterations (SCNAs)
@@ -163,12 +134,6 @@ NULL
 #' TCGA Workflow: Analyze cancer genomics and epigenomics data using Bioconductor packages.
 #' It contains the following files:
 #' \itemize{
-#'   \item GBMnocnvhg19: segmented CNV from SNP array (Affymetrix Genome-Wide
-#'   Human SNP Array 6.0) for 20  Glioblastoma multiforme (GBM)  samples.
-#'   \item GBMIllumina_HiSeq: a matrix with  raw expression signal for
-#'   expression of a gene for 20 GBM (Glioblastoma multiforme) samples
-#'   \item LGGIllumina_HiSeq: a matrix with  raw expression signal
-#'   for expression of a gene for 20 LGG (Lower grade glioma) samples
 #'   \item met20SamplesGBMLGGchr9:  DNA methylation matrix from Infinium
 #'    HumanMethylation450 platform
 #'     for 10 LGG (Lower grade glioma) and 10 GBM (Glioblastoma multiforme).
@@ -179,20 +144,20 @@ NULL
 #'     10  LGG (Lower grade glioma) and 10 GBM (Glioblastoma multiforme) in the required format
 #'     for to execute the R/Bioconductor ELMER package analysis and a vector
 #'     identifying which sample belongs to each tumor type.
-#'    \item GBMGistic: a subset of GBM GISTIC results which is used to
-#'    identify genes targeted by somatic copy-number  alterations (SCNAs)
 #'    \item biogrid: biogrid information
-#'   \item mafMutect2LGGGBM: Mutation annotation files for LGG
+#'   \item maf_lgg_gbm: Mutation annotation files for LGG
 #'     (Lower grade glioma) and GBM (Glioblastoma multiforme)
 #'     samples merged into a single matrix. The GDC Somatic Mutation Calling
 #'     Workflow mutect2 was used to create this MAF files.
-#'   \item markersMatrix: Probes meta file from broadinstitute website for
-#'   Copy Number Variation Analysis (CNV) analysis
 #'   \item  histoneMarks: histone marks specific for brain tissue using
 #'   from Roadmap database.
 #'   \item  genes_GR: A GRanges Object and a dataframe  with gene information
 #'   (hg19) downloaded from ENSEMBLE database using
 #'   biomart via TCGAbiolinks
+#'   \item TCGA_GBM_Transcriptome_20_samples:  a matrix with  raw expression signal for
+#'   expression of a gene for 20 GBM (Glioblastoma multiforme) samples
+#'   \item TCGA_LGG_Transcriptome_20_samples:   a matrix with  raw expression signal for
+#'   expression of a gene for 20 LGG (low grade glioma) samples
 #'}
 #'     For more information how to create these objects please read the vignette of this package with the
 #'     follwing command: \code{browseVignettes("TCGAWorkflowData")}
@@ -202,14 +167,10 @@ NULL
 #' @keywords utilities
 #' @examples
 #' data("elmerExample")
-#' data("GBMnocnvhg19")
-#' data("GBMIllumina_HiSeq")
-#' data("LGGIllumina_HiSeq")
-#' data("met20SamplesGBMLGGchr9")
-#' data("mafMutect2LGGGBM")
-#' data("markersMatrix")
-#' data("biogrid")
-#' data("GBMGistic")
+#' data("TCGA_LGG_Transcriptome_20_samples")
+#' data("TCGA_GBM_Transcriptome_20_samples")
 #' data("histoneMarks")
+#' data("biogrid")
 #' data("genes_GR")
+#' data("maf_lgg_gbm")
 NULL

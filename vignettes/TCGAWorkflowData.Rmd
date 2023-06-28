@@ -22,14 +22,12 @@ for LGG (Lower grade glioma) and GBM (Glioblastoma multiforme) samples.
 ```{r, fig.show='hold'}
 library(TCGAWorkflowData)
 data("elmerExample")
-data("GBMnocnvhg19")
-data("GBMIllumina_HiSeq")
-data("LGGIllumina_HiSeq")
-data("mafMutect2LGGGBM")
-data("markersMatrix")
+data("TCGA_LGG_Transcriptome_20_samples")
+data("TCGA_GBM_Transcriptome_20_samples")
 data("histoneMarks")
 data("biogrid")
 data("genes_GR")
+data("maf_lgg_gbm")
 ```
 
 # Data creation
@@ -68,35 +66,32 @@ Download and save a subset of GBM GISTIC results from GDAC firehose.
 library(RTCGAToolbox)
 # Download GISTIC results
 lastAnalyseDate <- getFirehoseAnalyzeDates(1)
-gistic <- getFirehoseData("GBM",gistic2_Date = lastAnalyseDate, GISTIC = TRUE)
+gistic <- getFirehoseData(
+  dataset = "GBM",
+  gistic2_Date = lastAnalyseDate,
+  GISTIC = TRUE
+)
 
 # get GISTIC results
-gistic.allbygene <- getData(gistic,type = "GISTIC", platform = "AllByGene")
-gistic.thresholedbygene <- getData(gistic,type = "GISTIC", platform = "ThresholdedByGene")
+gistic_allbygene <- getData(
+  gistic,
+  type = "GISTIC", 
+  platform = "AllByGene"
+)
 
-save(gistic.allbygene,gistic.thresholedbygene,file = "GBMGistic.rda", compress = "xz")
+gistic_thresholedbygene <- getData(
+  gistic,
+  type = "GISTIC", 
+  platform = "ThresholdedByGene"
+)
+
+save(
+  gistic_allbygene,
+  gistic_thresholedbygene,
+  file = "GBMGistic.rda", compress = "xz"
+)
 ```
 
-## Copy number variations (CNVs) 
-
-The following code will download 
-segmented CNV from SNP array (Affymetrix Genome-Wide Human SNP Array
-6.0) for 20  Glioblastoma multiforme (GBM)  samples.
-
-```{r , eval=FALSE, include=TRUE, results='asis'}
-library(TCGAbiolinks)
-query.gbm.nocnv <- GDCquery(project = "TCGA-GBM",
-                            data.category = "Copy number variation",
-                            legacy = TRUE,
-                            file.type = "nocnv_hg19.seg",
-                            sample.type = c("Primary solid Tumor"))
-# to reduce time we will select only 20 samples
-query.gbm.nocnv$results[[1]] <- query.gbm.nocnv$results[[1]][1:20,]
-
-GDCdownload(query.gbm.nocnv, chunks.per.download = 100)
-
-gbm.nocnv <- GDCprepare(query.gbm.nocnv, save = TRUE, save.filename = "GBMnocnvhg19.rda")
-```
 
 ## Gene expression data
 
@@ -104,29 +99,31 @@ The following code will download 20  LGG (Lower grade glioma) and 20 GBM (Gliobl
 samples that have gene expression data. The Gene expression data is the raw expression signal for expression of a gene.
 
 ```{r , eval=FALSE, include=TRUE, results='asis'}
-query <- GDCquery(project = "TCGA-GBM",
-                  data.category = "Gene expression",
-                  data.type = "Gene expression quantification",
-                  platform = "Illumina HiSeq", 
-                  file.type  = "results", 
-                  sample.type = c("Primary solid Tumor"),
-                  legacy = TRUE)
-# We will use only 20 samples to make the example faster
-query$results[[1]] <-  query$results[[1]][1:20,]                  
-GDCdownload(query)
-gbm.exp <- GDCprepare(query, save = TRUE, summarizedExperiment = TRUE, save.filename = "GBMIllumina_HiSeq.rda")
+query_exp_lgg <- GDCquery(
+  project = "TCGA-LGG",
+  data.category = "Transcriptome Profiling",
+  data.type = "Gene Expression Quantification", 
+  workflow.type = "STAR - Counts"
+)
+# Get only first 20 samples to make example faster
+query_exp_lgg$results[[1]] <- query_exp_lgg$results[[1]][1:20,]
+GDCdownload(query_exp_lgg)
+exp_lgg <- GDCprepare(
+  query = query_exp_lgg
+)
 
-query <- GDCquery(project = "TCGA-LGG",
-                  data.category = "Gene expression",
-                  data.type = "Gene expression quantification",
-                  platform = "Illumina HiSeq", 
-                  file.type  = "results", 
-                  sample.type = c("Primary solid Tumor"),
-                  legacy = TRUE)
-# We will use only 20 samples to make the example faster
-query$results[[1]] <-  query$results[[1]][1:20,]
-GDCdownload(query)
-lgg.exp <- GDCprepare(query, save = TRUE, summarizedExperiment = TRUE, save.filename = "LGGIllumina_HiSeq.rda")
+query_exp_gbm <- GDCquery(
+  project = "TCGA-GBM",
+  data.category = "Transcriptome Profiling",
+  data.type = "Gene Expression Quantification", 
+  workflow.type = "STAR - Counts"
+)
+# Get only first 20 samples to make example faster
+query_exp_gbm$results[[1]] <- query_exp_gbm$results[[1]][1:20,]
+GDCdownload(query_exp_gbm)
+exp_gbm <- GDCprepare(
+  query = query_exp_gbm
+)
 ```
 
 
@@ -146,29 +143,32 @@ The Gene expression data is the normalized results for expression of a gene.
 library(TCGAbiolinks)
 # Samples: primary solid tumor w/ DNA methylation and gene expression
 matched_met_exp <- function(project, n = NULL){
-    # get primary solid tumor samples: DNA methylation
-    message("Download DNA methylation information")
-    met450k <- GDCquery(project = project,
-                        data.category = "DNA methylation",
-                        platform = "Illumina Human Methylation 450",
-                        legacy = TRUE, 
-                        sample.type = c("Primary solid Tumor"))
-    met450k.tp <-  met450k$results[[1]]$cases
-    
-    # get primary solid tumor samples: RNAseq
-    message("Download gene expression information")
-    exp <- GDCquery(project = project,
-                    data.category = "Gene expression",
-                    data.type = "Gene expression quantification",
-                    platform = "Illumina HiSeq", 
-                    file.type  = "normalized_results", 
-                    sample.type = c("Primary solid Tumor"),
-                    legacy = TRUE)
-    exp.tp <- exp$results[[1]]$cases
-    # Get patients with samples in both platforms
-    patients <- unique(substr(exp.tp,1,15)[substr(exp.tp,1,12) %in% substr(met450k.tp,1,12)] )
-    if(!is.null(n)) patients <- patients[1:n] # get only n samples
-    return(patients)
+  # get primary solid tumor samples: DNA methylation
+  message("Download DNA methylation information")
+  met450k <- GDCquery(
+    project = project,
+    data.category = "DNA Methylation",
+    platform = "Illumina Human Methylation 450",
+    data.type = "Methylation Beta Value",
+    sample.type = c("Primary Tumor")
+  )
+  met450k.tp <-  met450k$results[[1]]$cases
+  
+  # get primary solid tumor samples: RNAseq
+  message("Download gene expression information")
+  exp <- GDCquery(
+    project = project,
+    data.category = "Transcriptome Profiling",
+    data.type = "Gene Expression Quantification", 
+    workflow.type = "STAR - Counts"
+    sample.type = c("Primary Tumor")
+  )
+  
+  exp.tp <- exp$results[[1]]$cases
+  # Get patients with samples in both platforms
+  patients <- unique(substr(exp.tp,1,15)[substr(exp.tp,1,12) %in% substr(met450k.tp,1,12)] )
+  if(!is.null(n)) patients <- patients[1:n] # get only n samples
+  return(patients)
 }
 lgg.samples <- matched_met_exp("TCGA-LGG", n = 10)
 gbm.samples <- matched_met_exp("TCGA-GBM", n = 10)
@@ -177,11 +177,13 @@ samples <- c(lgg.samples,gbm.samples)
 #-----------------------------------
 # 1 - Methylation
 # ----------------------------------
-query.met <- GDCquery(project = c("TCGA-LGG","TCGA-GBM"),
-                      data.category = "DNA methylation",
-                      platform = "Illumina Human Methylation 450",
-                      legacy = TRUE, 
-                      barcode = samples)
+query.met <- GDCquery(
+  project = c("TCGA-LGG","TCGA-GBM"),
+  data.category = "DNA Methylation",
+  platform = "Illumina Human Methylation 450",
+  data.type = "Methylation Beta Value",
+  barcode = samples
+)
 GDCdownload(query.met)
 met <- GDCprepare(query.met, save = FALSE)
 met <- subset(met,subset = as.character(GenomicRanges::seqnames(met)) %in% c("chr9"))
@@ -189,13 +191,14 @@ met <- subset(met,subset = as.character(GenomicRanges::seqnames(met)) %in% c("ch
 #-----------------------------------
 # 2 - Expression
 # ----------------------------------
-query.exp <- GDCquery(project = c("TCGA-LGG","TCGA-GBM"),
-                     data.category = "Gene expression",
-                     data.type = "Gene expression quantification",
-                     platform = "Illumina HiSeq", 
-                     file.type  = "normalized_results", 
-                     legacy = TRUE, 
-                     barcode =  samples)
+query.exp <- GDCquery(
+  project = c("TCGA-LGG","TCGA-GBM"),
+  data.category = "Transcriptome Profiling",
+  data.type = "Gene Expression Quantification", 
+  workflow.type = "STAR - Counts"
+  sample.type = c("Primary Tumor")
+  barcode =  samples
+)
 GDCdownload(query.exp)
 exp <- GDCprepare(query.exp, save = FALSE)
 save(exp, met, gbm.samples, lgg.samples, file = "elmerExample.rda", compress = "xz")
@@ -209,26 +212,16 @@ used is the mutect2. For more information please check [GDC](https://docs.gdc.ca
 
 ```{r , eval=FALSE, include=TRUE, results='asis'}
 library(TCGAbiolinks)
-LGGmut <- GDCquery_Maf(tumor = "LGG", pipelines = "mutect2")
-GBMmut <- GDCquery_Maf(tumor = "GBM", pipelines = "mutect2")
-mut <- plyr::rbind.fill(LGGmut, GBMmut)
-save(mut, LGGmut, GBMmut,file = "mafMutect2LGGGBM.rda")
-```
-
-## Probes meta file from broadinstitute website for Copy Number Variation Analysis (CNV) analysis
-
-```{r , eval=FALSE, include=TRUE, results='asis'}
-gdac.root <- "ftp://ftp.broadinstitute.org/pub/GISTIC2.0/hg19_support/"
-file <- paste0(gdac.root, "genome.info.6.0_hg19.na31_minus_frequent_nan_probes_sorted_2.1.txt")
-# Retrieve probes meta file from broadinstitute website
-if(!file.exists(basename(file))) downloader::download(file, basename(file))
-# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-==--=--==---=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-==--=--==--
-# For hg38 analysis please take a look on:
-# https://gdc.cancer.gov/about-data/data-harmonization-and-generation/gdc-reference-files
-# File: SNP6 GRCh38 Liftover Probeset File for Copy Number Variation Analysis
-# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-==--=--==---=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-==--=--==--
-markersMatrix <-  readr::read_tsv(basename(file), col_names = FALSE, col_types = "ccn", progress = FALSE)
-save(markersMatrix, file = "markersMatrix.rda", compress = "xz")
+query <- GDCquery(
+  project = c("TCGA-LGG","TCGA-GBM"), 
+  data.category = "Simple Nucleotide Variation", 
+  access = "open",
+  data.type = "Masked Somatic Mutation", 
+  workflow.type = "Aliquot Ensemble Somatic Variant Merging and Masking"
+)
+GDCdownload(query)
+maf <- GDCprepare(query)
+save(maf,file = "maf_lgg_gbm.rda",compress = "xz")
 ```
 
 ## Biogrid data
@@ -238,26 +231,16 @@ Download biogrid information.
 ```{r , eval=FALSE, include=TRUE, results='asis'}
 ### read biogrid info
 ### Check last version in https://thebiogrid.org/download.php 
-file <- "http://thebiogrid.org/downloads/archives/Release%20Archive/BIOGRID-3.4.146/BIOGRID-ALL-3.4.146.tab2.zip"
+file <- "https://downloads.thebiogrid.org/Download/BioGRID/Latest-Release/BIOGRID-ALL-LATEST.tab2.zip"
 if(!file.exists(gsub("zip","txt",basename(file)))){
   downloader::download(file,basename(file))
   unzip(basename(file),junkpaths =TRUE)
 }
 
-tmp.biogrid <- read.csv(gsub("zip","txt",basename(file)), header=TRUE, sep="\t", stringsAsFactors=FALSE)
+tmp.biogrid <- vroom::vroom(
+  dir(pattern = "BIOGRID-ALL.*\\.txt")
+)
 save(tmp.biogrid, file = "biogrid.rda", compress = "xz")
-```
-
-## GISTIC2.0 auxiliary data
-
-Download hg19_support information.
-
-```{r , eval=FALSE, include=TRUE, results='asis'}
-file <- "ftp://ftp.broadinstitute.org/pub/GISTIC2.0/hg19_support/CNV.hg19.bypos.111213.txt"
-if(!file.exists(basename(file))) downloader::download(file, basename(file))
-commonCNV <- readr::read_tsv(basename(file), progress = FALSE)
-commonCNV <- as.data.frame(commonCNV)
-save(commonCNV,file = "CNV.hg19.bypos.111213.rda",compress = "xz")
 ```
 
 ## Histone marks
